@@ -4,12 +4,12 @@ export const raytrace = (function() {
     var objects = [];
     var settings = {
         "fov": 30.0,
-        "invWidth": 1 / 640,
-        "invHeight": 1 / 480,
-        "aspectRatio": 640 / 480,
+        "invWidth": function() { return 1 / settings.width; },
+        "invHeight": function() { return 1 / settings.height; },
+        "aspectRatio": function() { return settings.width / settings.height; },
         "width": 640,
         "height": 480,
-        "angle": Math.tan(Math.PI * 0.5 * 30.0 / 180.0),
+        "angle": function() { return Math.tan(Math.PI * 0.5 * settings.fov / 180.0); },
 		"rayDepth": 12,
 		"shadowRays": 36,
 		"backgroundColor": new Vec3(0,0,0),
@@ -119,21 +119,16 @@ export const raytrace = (function() {
         addSphere: function(position, radius, surfaceColor, reflection, emissionColor, transparency){
             objects.push(Sphere(position, radius, surfaceColor, reflection, emissionColor, transparency));
         },
-        changeSettingsByCanvas: function (canvas) {
-            settings.invWidth = 1 / Math.round(canvas.width());
-            settings.invHeight = 1 / Math.round(canvas.height());
-            settings.aspectRatio = Math.round(canvas.width()) / Math.round(canvas.height());
-            settings.angle = Math.tan(Math.PI * 0.5 * settings.fov / 180.0);
-            settings.width = Math.round(canvas.width());
-            settings.height = Math.round(canvas.height());
+        changeSettingsByCanvas: function (self) {
+            settings.width = Math.round(self.state.width);
+            settings.height = Math.round(self.state.height);
             console.log("Settings changed:");
             console.log(settings);
         },
         /* render scene on given canvas object */
-        render: function(canvas){
-            this.changeSettingsByCanvas(canvas);
-			canvas.attr("width", settings.width).attr("height", settings.height);
-            var context = canvas[0].getContext("2d");
+        render: function(canvas, self){
+            this.changeSettingsByCanvas(self);
+            var context = canvas.getContext("2d");
             var imagedata = context.createImageData(settings.width, settings.height);
             for(var y = 0; y < settings.height; y++) {
                 for(var x = 0; x < settings.width; x++) {
@@ -145,8 +140,8 @@ export const raytrace = (function() {
 					var pixel = trace(new Vec3(0,0,0), raydir, 0);
 					var pixelindex = (y * settings.width + x) * 4;
 					imagedata.data[pixelindex] = Math.floor(pixel.x >= 1.0 ? 255 : pixel.x * 256.0); // Red
-					imagedata.data[pixelindex+1] =Math.floor(pixel.x >= 1.0 ? 255 : pixel.x * 256.0); // Green
-					imagedata.data[pixelindex+2] = Math.floor(pixel.x >= 1.0 ? 255 : pixel.x * 256.0);  // Blue
+					imagedata.data[pixelindex+1] =Math.floor(pixel.y >= 1.0 ? 255 : pixel.y * 256.0); // Green
+					imagedata.data[pixelindex+2] = Math.floor(pixel.z >= 1.0 ? 255 : pixel.z * 256.0);  // Blue
 					imagedata.data[pixelindex+3] = 255;   // Alpha
                 }
             }
