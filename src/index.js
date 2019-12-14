@@ -11,20 +11,23 @@ class RaytraceUI extends React.Component {
             numberStyle: {display: "flex"},
             vectorStyle: {display: "none"},
             number: 30,
-            vector: {x: 0, y: 0, z:0}
+            vector: {x: 0, y: 0, z:0},
+            width: 1166,
+            height: 874
         };
 
         this.optionsChange = this.optionsChange.bind(this);
+
     }
     render(){
         return(
             <div className="row">
                 <div className="output">
-
+                    <canvas ref="canvas" width={this.state.width} height={this.state.height}></canvas>
                 </div>
                 <div className="options">
                     <h1>Raytracer</h1>
-                    <a onClick={this.startRaytrace} className="btn btn-primary">Render</a>
+                    <a onClick={this.startRaytrace.bind(this)} className="btn btn-primary">Render</a>
 
                     <div className="row">
                         <div className="col">
@@ -70,7 +73,8 @@ class RaytraceUI extends React.Component {
     }
 
     startRaytrace(){
-        // TODO
+        console.log(this.refs.canvas);
+        raytrace.render(this.refs.canvas, this);
     }
 }
  
