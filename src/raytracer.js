@@ -10,7 +10,7 @@ export const raytrace = (function() {
         "angle": function() { return Math.tan(Math.PI * 0.5 * settings.fov / 180.0); },
 		"rayDepth": 12,
 		"shadowRays": 36,
-		"backgroundColor": new Vec3(0,0,0),
+		"backgroundColor": new Vec3(0.1,0.5,1),
 		"shadowRayOffset": 3.5, // meaning 350%!
 		"minShadowBrightness": 0.125 // shadows not completly black!
     };
