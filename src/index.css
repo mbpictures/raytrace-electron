@@ -36,17 +36,21 @@ h1 {
   font-size: 3em;
 }
 .options .row {
-  margin-top: 35px;
+  margin:35px 0;
 }
 .btn {
   padding: 5% 20%;
   background: transparent;
-  border: 1px solid;
+  border: 1px solid #aaaaaa;
   cursor: pointer;
+  transition: .3s ease;
+}
+.btn:hover {
+  color: #303030;
+  background: #aaaaaa;
 }
 .btn.btn-primary {
   border: #3498db 1px solid;
-  transition: .3s ease;
   color: #3498db;
   margin-bottom: 20px;
 }

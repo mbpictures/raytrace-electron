@@ -16,9 +16,11 @@ class RaytraceUI extends React.Component {
             vector: {x: 0, y: 0, z:0},
             width: 1166,
             height: 874
+            selectedOption: "fov"
         };
 
         this.optionsChange = this.optionsChange.bind(this);
+        this.changeOptionValue = this.changeOptionValue.bind(this);
 
         raytrace.addObject(new Sphere(new Vec3(0.0, -10004.0, -20.0), 10000.0, new Vec3(0.2, 0.2, 0.2), 0.0, 0.0, new Vec3(0,0,0)));
 		//spheres
@@ -42,7 +44,7 @@ class RaytraceUI extends React.Component {
 
                     <div className="row">
                         <div className="col">
-                            <select id="options" className="input" onChange={this.optionsChange}>
+                            <select ref="options" id="options" className="input" onChange={this.optionsChange}>
                                 <option value="fov">FOV</option>
                                 <option value="rayDepth">Ray Depth</option>
                                 <option value="shadowRays">Shadow Rays</option>
@@ -53,23 +55,34 @@ class RaytraceUI extends React.Component {
                         </div>
                         <div className="col">
                             <div className="number" style={this.state.numberStyle}>
-                                <input type="text" className="input" value={this.state.number} />
+                                <input type="text" className="input" value={this.state.number} onChange={(evt) => this.changeOptionValue(evt, "number")} />
                             </div>
                             <div className="vector" style={this.state.vectorStyle}>
-                                <input type="text" className="input" value={this.state.vector.x} />
-                                <input type="text" className="input" value={this.state.vector.y} />
-                                <input type="text" className="input" value={this.state.vector.z} />
+                                <input type="text" className="input" value={this.state.vector.x} onChange={(evt) => this.changeOptionValue(evt, "vector", "x")} />
+                                <input type="text" className="input" value={this.state.vector.y} onChange={(evt) => this.changeOptionValue(evt, "vector", "y")} />
+                                <input type="text" className="input" value={this.state.vector.z} onChange={(evt) => this.changeOptionValue(evt, "vector", "z")} />
                             </div>
                         </div>
                     </div>
+                    <a onClick={this.saveCurrentOption.bind(this)} className="btn btn-secondary">Apply</a>
                 </div>
             </div>
         );
+    }
+    
+    changeOptionValue(event, option, subOption){
+        var state = this.state;
+        if(option === "number")
+            state[option] = event.target.value;
+        else
+            state[option][subOption] = event.target.value;
+        this.setState(state);
     }
 
     optionsChange(event){
         var val = raytrace.getOption(event.target.value);
         var state = this.state;
+        state["selectedOption"] = event.target.value;
         if(typeof val === 'object'){
             state.vectorStyle = {display: "flex"};
             state.numberStyle = {display: "none"};
@@ -81,6 +94,18 @@ class RaytraceUI extends React.Component {
             state.number = val;
         }
         this.setState(state);
+    }
+    
+    saveCurrentOption(){
+        var option = raytrace.getOption(this.state.selectedOption);
+		var value;
+		if(typeof option === 'object'){
+			value = {x: parseFloat(this.state.vector.x), y: parseFloat(this.state.vector.y), z: parseFloat(this.state.vector.z)};
+		}
+		else{
+			value = parseFloat(this.state.number);
+		}
+		raytrace.setOption(this.state.selectedOption, value);
     }
 
     startRaytrace(){
