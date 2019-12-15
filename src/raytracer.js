@@ -126,14 +126,14 @@ export const raytrace = (function() {
         /* render scene on given canvas object */
         render: function(canvas, self){
             this.changeSettingsByCanvas(self);
-            var context = canvas.getContext("2d");
+			var context = canvas.getContext("2d");
             var imagedata = context.createImageData(settings.width, settings.height);
             for(var y = 0; y < settings.height; y++) {
                 for(var x = 0; x < settings.width; x++) {
-                    var xx = (2 * ((x + 0.5) * settings.invWidth) * settings.angle * settings.aspectRatio);
-                    var yy = (1 - 2 * ((y + 0.5) * settings.invHeight)) * settings.angle;
+                    var xx = (2 * ((x + 0.5) * settings.invWidth()) * settings.angle() * settings.aspectRatio());
+                    var yy = (1 - 2 * ((y + 0.5) * settings.invHeight())) * settings.angle();
                     var raydir = new Vec3(xx, yy, -1);
-                    raydir.normalize();
+					raydir.normalize();
 					
 					var pixel = trace(new Vec3(0,0,0), raydir, 0);
 					var pixelindex = (y * settings.width + x) * 4;
