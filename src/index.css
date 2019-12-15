@@ -22,10 +22,10 @@ canvas {
 .output {
   width: 75%;
   height: 100%;
-  padding: 5%;
 }
 .options {
   width: 25%;
+  padding: 0 5%;
 }
 .output > canvas {
   width: 100%;
