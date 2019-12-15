@@ -1,6 +1,4 @@
-export const raytrace = (function() {
-    'use strict';
-  
+export const raytrace = (function() {  
     var objects = [];
     var settings = {
         "fov": 30.0,
@@ -162,8 +160,7 @@ export const raytrace = (function() {
     };
   }());
 
-  function Sphere(position, radius, surfaceColor, reflection, transparency, emissionColor){
-	  "use strict";
+export function Sphere(position, radius, surfaceColor, reflection, transparency, emissionColor){
     this.position = position;
     this.radius = radius;
     this.surfaceColor = surfaceColor;
@@ -184,36 +181,35 @@ export const raytrace = (function() {
     };
   }
 
-  function Vec3(x, y, z){
-	  "use strict";
-        this.x = x;
-        this.y = y;
-        this.z = z;
+export function Vec3(x, y, z){
+	this.x = x;
+	this.y = y;
+	this.z = z;
 
-        this.add = function (v) {
-			return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z);
-        };
-        this.subtract = function (v) {
-            return new Vec3(this.x - v.x, this.y - v.y, this.z - v.z);
-        };
-        this.multiply = function (v) {
-            return new Vec3(this.x * v.x, this.y * v.y, this.z * v.z);
-        };
-        this.dot = function (v){
-            return this.x * v.x + this.y * v.y + this.z * v.z;
-        };
-        this.length2 = function (){
-            return this.x * this.x + this.y * this.y + this.z * this.z;
-        };
-        this.normalize = function (){
-            var nor2 = this.length2();
-            if(!(nor2 > 0)){ return this; }
-            var invNor = 1 / Math.sqrt(nor2);
-            this.x *= invNor; this.y *= invNor; this.z *= invNor;
-			return this;
-        };
-	  this.sqrt = function(){
-		  if(this.x < 0 || this.y < 0 || this.z < 0) { return new Vec3(0,0,0); }
-		  return new Vec3(Math.sqrt(this.x), Math.sqrt(this.y), Math.sqrt(this.z));
-	  };
+	this.add = function (v) {
+		return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z);
+	};
+	this.subtract = function (v) {
+		return new Vec3(this.x - v.x, this.y - v.y, this.z - v.z);
+	};
+	this.multiply = function (v) {
+		return new Vec3(this.x * v.x, this.y * v.y, this.z * v.z);
+	};
+	this.dot = function (v){
+		return this.x * v.x + this.y * v.y + this.z * v.z;
+	};
+	this.length2 = function (){
+		return this.x * this.x + this.y * this.y + this.z * this.z;
+	};
+	this.normalize = function (){
+		var nor2 = this.length2();
+		if(!(nor2 > 0)){ return this; }
+		var invNor = 1 / Math.sqrt(nor2);
+		this.x *= invNor; this.y *= invNor; this.z *= invNor;
+		return this;
+	};
+	this.sqrt = function(){
+		if(this.x < 0 || this.y < 0 || this.z < 0) { return new Vec3(0,0,0); }
+		return new Vec3(Math.sqrt(this.x), Math.sqrt(this.y), Math.sqrt(this.z));
+	};
   }
