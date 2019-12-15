@@ -54,28 +54,23 @@ class RaytraceUI extends React.Component {
                     <h1>Raytracer</h1>
                     <a onClick={this.startRaytrace.bind(this)} className="btn btn-primary">Render</a>
 
-                    <div className="row">
-                        <div className="col">
-                            <select ref="options" id="options" className="input" onChange={this.optionsChange}>
-                                <option value="fov">FOV</option>
-                                <option value="rayDepth">Ray Depth</option>
-                                <option value="shadowRays">Shadow Rays</option>
-                                <option value="backgroundColor">Background Color</option>
-                                <option value="shadowRayOffset">Shadow Ray Offset</option>
-                                <option value="minShadowBrightness">Min Shadow Brightness</option>
-                            </select>
-                        </div>
-                        <div className="col">
-                            <div className="number" style={this.state.numberStyle}>
-                                <input type="text" className="input" value={this.state.number} onChange={(evt) => this.changeOptionValue(evt, "number")} />
-                            </div>
-                            <div className="vector" style={this.state.vectorStyle}>
-                                <input type="text" className="input" value={this.state.vector.x} onChange={(evt) => this.changeOptionValue(evt, "vector", "x")} />
-                                <input type="text" className="input" value={this.state.vector.y} onChange={(evt) => this.changeOptionValue(evt, "vector", "y")} />
-                                <input type="text" className="input" value={this.state.vector.z} onChange={(evt) => this.changeOptionValue(evt, "vector", "z")} />
-                            </div>
-                        </div>
+                    <select ref="options" id="options" className="input" onChange={this.optionsChange}>
+                        <option value="fov">FOV</option>
+                        <option value="rayDepth">Ray Depth</option>
+                        <option value="shadowRays">Shadow Rays</option>
+                        <option value="backgroundColor">Background Color</option>
+                        <option value="shadowRayOffset">Shadow Ray Offset</option>
+                        <option value="minShadowBrightness">Min Shadow Brightness</option>
+                    </select>
+                    <div className="number" style={this.state.numberStyle}>
+                        <input type="text" className="input" value={this.state.number} onChange={(evt) => this.changeOptionValue(evt, "number")} />
                     </div>
+                    <div className="vector" style={this.state.vectorStyle}>
+                        <input type="text" className="input" value={this.state.vector.x} onChange={(evt) => this.changeOptionValue(evt, "vector", "x")} />
+                        <input type="text" className="input" value={this.state.vector.y} onChange={(evt) => this.changeOptionValue(evt, "vector", "y")} />
+                        <input type="text" className="input" value={this.state.vector.z} onChange={(evt) => this.changeOptionValue(evt, "vector", "z")} />
+                    </div>
+                    
                     <a onClick={this.saveCurrentOption.bind(this)} className="btn btn-secondary">Apply</a>
                 </div>
             </div>

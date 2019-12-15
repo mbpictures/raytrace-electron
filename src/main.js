@@ -8,7 +8,7 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     title: "Raytracing",
-    width: 800,
+    width: 900,
     height: 500,
     resizable: true,
     webPreferences: {
