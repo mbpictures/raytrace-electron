@@ -14,10 +14,11 @@ class RaytraceUI extends React.Component {
             vectorStyle: {display: "none"},
             number: 30,
             vector: {x: 0, y: 0, z:0},
-            width: 1166,
-            height: 874
+            width: 640,
+            height: 480,
             selectedOption: "fov"
         };
+        this.output = React.createRef()
 
         this.optionsChange = this.optionsChange.bind(this);
         this.changeOptionValue = this.changeOptionValue.bind(this);
@@ -32,10 +33,21 @@ class RaytraceUI extends React.Component {
 		raytrace.addObject(new Sphere(new Vec3(0.0, 20, -30.0), 3, new Vec3(0.0, 0.0, 0.0), 0.0, 0.0, new Vec3(3, 3, 3)));
 
     }
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions.bind(this));
+    }
+    updateDimensions(){
+        var state = this.state;
+        state.width = this.output.current.offsetWidth;
+        state.height = this.output.current.offsetHeight;
+        console.log(this.output.current.offsetWidth);
+        this.setState(state);
+    }
     render(){
         return(
             <div className="row">
-                <div className="output">
+                <div className="output" ref={this.output}>
                     <canvas ref="canvas" width={this.state.width} height={this.state.height}></canvas>
                 </div>
                 <div className="options">
