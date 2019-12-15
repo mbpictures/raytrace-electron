@@ -1,5 +1,4 @@
 const {app, BrowserWindow} = require('electron')
-const path = require('path')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -8,15 +7,15 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    title: "Raytracing",
     width: 800,
-    height: 600,
+    height: 500,
     resizable: true,
     webPreferences: {
       nodeIntegration: true
     },
     show: false
   })
-
   // and load the index.html of the app.
   mainWindow.loadFile('build/index.html')
 
@@ -31,7 +30,12 @@ function createWindow () {
     mainWindow = null
   })
 
+  mainWindow.on('page-title-updated', (evt) => {
+    evt.preventDefault();
+  });
+
   mainWindow.once('ready-to-show', () => {
+    mainWindow.setMenu(null)
     mainWindow.show()
   })
 }
