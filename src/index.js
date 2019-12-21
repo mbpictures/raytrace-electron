@@ -45,6 +45,10 @@ class RaytraceUI extends React.Component {
         this.setState(state);
     }
     render(){
+        var availableOptions = raytrace.getAvailableOptions();
+        var options = Object.keys(availableOptions).map(function(key){
+            return <option value={key}>{availableOptions[key]}</option>;
+        });
         return(
             <div className="row">
                 <div className="output" ref={this.output}>
@@ -55,12 +59,7 @@ class RaytraceUI extends React.Component {
                     <a onClick={this.startRaytrace.bind(this)} className="btn btn-primary">Render</a>
 
                     <select ref="options" id="options" className="input" onChange={this.optionsChange}>
-                        <option value="fov">FOV</option>
-                        <option value="rayDepth">Ray Depth</option>
-                        <option value="shadowRays">Shadow Rays</option>
-                        <option value="backgroundColor">Background Color</option>
-                        <option value="shadowRayOffset">Shadow Ray Offset</option>
-                        <option value="minShadowBrightness">Min Shadow Brightness</option>
+                        {options}
                     </select>
                     <div className="number" style={this.state.numberStyle}>
                         <input type="text" className="input" value={this.state.number} onChange={(evt) => this.changeOptionValue(evt, "number")} />

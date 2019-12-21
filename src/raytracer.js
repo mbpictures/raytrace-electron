@@ -1,19 +1,19 @@
 export const raytrace = (function() {  
     var objects = [];
     var settings = {
-        "fov": 30.0,
         "invWidth": function() { return 1 / settings.width; },
         "invHeight": function() { return 1 / settings.height; },
         "aspectRatio": function() { return settings.width / settings.height; },
         "width": 640,
         "height": 480,
         "angle": function() { return Math.tan(Math.PI * 0.5 * settings.fov / 180.0); },
+        "fov": 30.0,
 		"rayDepth": 12,
 		"shadowRays": 36,
 		"backgroundColor": new Vec3(0.1,0.5,1),
 		"shadowRayOffset": 3.5, // meaning 350%!
 		"minShadowBrightness": 0.125 // shadows not completly black!
-    };
+	};
 	
 	var mix = function (a, b, mix){
 		return b * mix + a * (1 - mix);
@@ -156,6 +156,15 @@ export const raytrace = (function() {
 			settings[key] = typeof value === 'object' ? new Vec3(value.x, value.y, value.z) : value;
 			console.log("Settings changed:");
 			console.log(settings);
+		},
+		getAvailableOptions: function (){
+			var result = {};
+			for(var key in settings) {
+				console.log(key);
+				if(typeof settings[key] !== "function" && (key !== "width" && key !== "height"))
+					result[key] = key.replace( /([A-Z])/g, " $1" ).charAt(0).toUpperCase() + key.replace( /([A-Z])/g, " $1" ).slice(1);
+			}
+			return result;
 		}
     };
   }());
