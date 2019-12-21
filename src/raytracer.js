@@ -1,3 +1,5 @@
+import SphereIMG from './images/Sphere.png'
+
 export const raytrace = (function() {  
     var objects = [];
     var settings = {
@@ -160,11 +162,13 @@ export const raytrace = (function() {
 		getAvailableOptions: function (){
 			var result = {};
 			for(var key in settings) {
-				console.log(key);
 				if(typeof settings[key] !== "function" && (key !== "width" && key !== "height"))
 					result[key] = key.replace( /([A-Z])/g, " $1" ).charAt(0).toUpperCase() + key.replace( /([A-Z])/g, " $1" ).slice(1);
 			}
 			return result;
+		},
+		getObjects: function (){
+			return objects;
 		}
     };
   }());
@@ -175,7 +179,9 @@ export function Sphere(position, radius, surfaceColor, reflection, transparency,
     this.surfaceColor = surfaceColor;
     this.reflection = reflection;
     this.emissionColor = emissionColor;
-    this.transparency = transparency;
+	this.transparency = transparency;
+	this.type = "Sphere";
+	this.preview = SphereIMG;
 
     /* intersection between this and ray consisting of origin and direction (Vec3)
         return: false (no intersection) or array of 2 intersection points */
@@ -187,7 +193,23 @@ export function Sphere(position, radius, surfaceColor, reflection, transparency,
         if(d2 > (this.radius * this.radius)){ return false; }
         var thc = Math.sqrt((this.radius * this.radius) - d2);
         return [(tca - thc), (tca + thc)];
-    };
+	};
+	this.getOption = function(name) {
+		return this[name];
+	};
+	this.setOption = function(key, value) {
+		this[key] = value;
+	}
+	this.getAvailableOptions = function() {
+		return {
+			position: position,
+			radius: radius,
+			surfaceColor: surfaceColor,
+			reflection: reflection,
+			emissionColor: emissionColor,
+			transparency: transparency
+		};
+	};
   }
 
 export function Vec3(x, y, z){

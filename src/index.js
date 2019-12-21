@@ -4,6 +4,7 @@ import './index.css';
 import {raytrace} from './raytracer';
 import {Sphere} from './raytracer';
 import {Vec3} from './raytracer';
+import {ObjectComponent} from './SubComponents/objectUI'
  
 class RaytraceUI extends React.Component {
 
@@ -16,9 +17,11 @@ class RaytraceUI extends React.Component {
             vector: {x: 0, y: 0, z:0},
             width: 640,
             height: 480,
-            selectedOption: "fov"
+            selectedOption: "fov",
+            objectsExpanded: false
         };
-        this.output = React.createRef()
+        this.output = React.createRef();
+        this.objects = React.createRef();
 
         this.optionsChange = this.optionsChange.bind(this);
         this.changeOptionValue = this.changeOptionValue.bind(this);
@@ -49,6 +52,9 @@ class RaytraceUI extends React.Component {
         var options = Object.keys(availableOptions).map(function(key){
             return <option value={key}>{availableOptions[key]}</option>;
         });
+
+        var objectsClasses = "objects" + (this.state.objectsExpanded ? " open" : "");
+        var expandObjectsClasses = "expandObjects" + (this.state.objectsExpanded ? " open" : "");
         return(
             <div className="row">
                 <div className="output" ref={this.output}>
@@ -72,6 +78,17 @@ class RaytraceUI extends React.Component {
                     
                     <a onClick={this.saveCurrentOption.bind(this)} className="btn btn-secondary">Apply</a>
                 </div>
+                <div className={objectsClasses} ref={this.objects}>
+                    <h1>Objects</h1>
+                    <ul>
+                    {
+                        raytrace.getObjects().map(element => {
+                            return <ObjectComponent object={element} name={element.type} preview={element.preview} />
+                        })
+                    }
+                    </ul>
+                </div>
+                <div className={expandObjectsClasses} onClick={this.expandObjects.bind(this)}><span></span><span></span><span></span></div>
             </div>
         );
     }
@@ -117,6 +134,12 @@ class RaytraceUI extends React.Component {
     startRaytrace(){
         console.log(this.refs.canvas);
         raytrace.render(this.refs.canvas, this);
+    }
+
+    expandObjects(){
+        var state = this.state;
+        state.objectsExpanded = !state.objectsExpanded;
+        this.setState(state);
     }
 }
  
