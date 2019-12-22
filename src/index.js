@@ -75,8 +75,6 @@ class RaytraceUI extends React.Component {
                         <input type="text" className="input" value={this.state.vector.y} onChange={(evt) => this.changeOptionValue(evt, "vector", "y")} />
                         <input type="text" className="input" value={this.state.vector.z} onChange={(evt) => this.changeOptionValue(evt, "vector", "z")} />
                     </div>
-                    
-                    <a onClick={this.saveCurrentOption.bind(this)} className="btn btn-secondary">Apply</a>
                 </div>
                 <div className={objectsClasses} ref={this.objects}>
                     <h1>Objects</h1>
@@ -121,18 +119,6 @@ class RaytraceUI extends React.Component {
             state.number = val;
         }
         this.setState(state);
-    }
-    
-    saveCurrentOption(){
-        var option = raytrace.getOption(this.state.selectedOption);
-		var value;
-		if(typeof option === 'object'){
-			value = {x: parseFloat(this.state.vector.x), y: parseFloat(this.state.vector.y), z: parseFloat(this.state.vector.z)};
-		}
-		else{
-			value = parseFloat(this.state.number);
-		}
-		raytrace.setOption(this.state.selectedOption, value);
     }
 
     startRaytrace(){
