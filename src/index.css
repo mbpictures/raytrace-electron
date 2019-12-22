@@ -28,7 +28,7 @@ canvas {
 }
 .options {
   width: 25%;
-  padding: 0 5%;
+  padding: 0 1%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -57,6 +57,7 @@ h1 {
   border: 1px solid #aaaaaa;
   cursor: pointer;
   transition: .3s ease;
+  text-align: center;
 }
 .btn:hover {
   color: #303030;
@@ -87,7 +88,7 @@ h1 {
   display: inline-block;
   color: white;
   padding: 10px;
-  width: 95%;
+  width: 100%;
   box-sizing: border-box;
   background-color: rgba(255,255,255,0.25);
   border: none;
@@ -106,9 +107,16 @@ h1 {
 }
 .vector {
   display: flex;
+  justify-content: center;
 }
 .vector .input {
   width: 25%;
+}
+.vector .input:first-child {
+  margin-left: 0;
+}
+.vector .input:last-child {
+  margin-right: 0;
 }
 
 .expandObjects {
@@ -151,11 +159,11 @@ h1 {
 .objects {
   width: 25%;
   height: 100%;
-  padding: 0 5%;
+  padding: 0 1%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #505050;
+  background-color: #606060;
   z-index:2;
   position: absolute;
   right: -25%;
@@ -190,6 +198,7 @@ h1 {
   margin: 1% 0;
   background-color: #888888;
   overflow: hidden;
+  border-radius: 5px;
 }
 .objects ul li .header {
   display: flex;
@@ -276,4 +285,7 @@ h1 {
 }
 .ReactCollapse--collapse {
   transition: .5s ease;
+}
+.ReactCollapse--content {
+  padding: 0 1%;
 }
