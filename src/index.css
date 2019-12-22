@@ -161,6 +161,19 @@ h1 {
   max-height: 75%;
   overflow-y: scroll;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+ 
+::-webkit-scrollbar-track {
+  background: #ddd;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: #666; 
+}
+
 .objects ul li {
   margin: 1% 0;
   background-color: #888888;
@@ -169,6 +182,19 @@ h1 {
 .objects ul li .header {
   display: flex;
   cursor: pointer;
+  align-items: center;
+}
+.objects ul li .header .arrow {
+  width: 20px;
+  height: 20px;
+  background-color: #cccccc;
+  clip-path: polygon(25% 0, 100% 50%, 25% 100%);
+  transform: rotate(180deg);
+  transition: .4s ease;
+}
+.objects ul li .header .arrow.open {
+  transform: rotate(90deg);
+}
 }
 .objects ul li .preview {
   flex-basis: 0;
@@ -193,4 +219,7 @@ h1 {
 }
 .objects ul li .body.open {
   display: block;
+
+.ReactCollapse--collapse {
+  transition: .5s ease;
 }

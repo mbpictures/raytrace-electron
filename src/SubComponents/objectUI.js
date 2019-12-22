@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {ValueComponent} from './valueUI';
+import Collapse from 'react-collapse';
 export class ObjectComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             bodyEnabled: false
         };
-        this.body = React.createRef();
 
         Object.keys(this.props.object.getAvailableOptions()).map(key => {
             this[`${key}_ref`] = React.createRef()
@@ -29,7 +29,6 @@ export class ObjectComponent extends React.Component {
 
     render() {
         var availableOptions = this.props.object.getAvailableOptions();
-        var bodyClass = "body" + (this.state.bodyEnabled ? " open" : "");
         var self = this;
         return (
                 <li>
@@ -37,15 +36,18 @@ export class ObjectComponent extends React.Component {
                         <div className="preview"><img src={this.props.preview} /></div>
                         <h2>{this.props.name}</h2>
                     </div>
-                    <div className={bodyClass} ref={this.body}>
-                        <ul>
-                            {Object.keys(availableOptions).map(function(key){
-                                return <li>
-                                    {key}: <ValueComponent value={availableOptions[key]} onChangeHandler={(value) => self.updateOptions(key, value)} />
-                                </li>;
-                            })}
-                        </ul>
-                    </div>
+                    <Collapse isOpened={this.state.bodyEnabled}>
+                        <div>
+                            <ul>
+                                {Object.keys(availableOptions).map(function(key){
+                                    return <li>
+                                        {key}: <ValueComponent value={availableOptions[key]} onChangeHandler={(value) => self.updateOptions(key, value)} />
+                                    </li>;
+                                })}
+                            </ul>
+                        </div>
+                    </Collapse>
+                    
                 </li>
         );
     }
