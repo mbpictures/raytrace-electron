@@ -87,6 +87,10 @@ class RaytraceUI extends React.Component {
                         })
                     }
                     </ul>
+                    <a className="btn btn-success" onClick={this.addObject.bind(this)}>
+                        <div className="plus green"></div>
+                        Add Object
+                    </a>
                 </div>
                 <div className={expandObjectsClasses} onClick={this.expandObjects.bind(this)}><span></span><span></span><span></span></div>
             </div>
@@ -144,6 +148,11 @@ class RaytraceUI extends React.Component {
 
     deleteObject(index) {
         raytrace.deleteObject(index);
+        this.setState(this.state);
+    }
+
+    addObject() {
+        raytrace.addObject(new Sphere(new Vec3(0.0, 0.0, 0.0), 3.0, new Vec3(1.00, 1, 1), 1.0, 0.0, new Vec3(0,0,0)));
         this.setState(this.state);
     }
 }

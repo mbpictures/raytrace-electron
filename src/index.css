@@ -62,6 +62,9 @@ h1 {
   color: #303030;
   background: #aaaaaa;
 }
+.btn:hover > div {
+  background-color: #303030;
+}
 .btn.btn-primary {
   border: #3498db 1px solid;
   color: #3498db;
@@ -69,6 +72,15 @@ h1 {
 }
 .btn.btn-primary:hover {
   background: #3498db;
+  color: #303030;
+}
+.btn.btn-success {
+  border: #38b418 1px solid;
+  color: #38b418;
+  margin-bottom: 20px;
+}
+.btn.btn-success:hover {
+  background: #38b418;
   color: #303030;
 }
 .input {
@@ -250,6 +262,18 @@ h1 {
   display: block;
 }
 
+.plus {
+  background-color: inherit;
+  width: 20px;
+  height: 20px;
+  clip-path: polygon(0 40%, 40% 40%, 40% 0, 60% 0, 60% 40%, 100% 40%, 100% 60%, 60% 60%, 60% 100%, 40% 100%, 40% 60%, 0 60%);
+  float: left;
+  margin-right: 5px;
+  transition: .3s ease;
+}
+.plus.green {
+  background-color: #38b418;
+}
 .ReactCollapse--collapse {
   transition: .5s ease;
 }
