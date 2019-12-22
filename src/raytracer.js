@@ -1,4 +1,5 @@
 import SphereIMG from './images/Sphere.png'
+import CubeIMG from './images/Cube.png'
 
 export const raytrace = (function() {  
     var objects = [];
@@ -213,8 +214,65 @@ export function Sphere(position, radius, surfaceColor, reflection, transparency,
 			transparency: transparency
 		};
 	};
-  }
+}
 
+export function Cube(position, edgeLength, surfaceColor, reflection, transparency, emissionColor) {
+	this.position = position;
+    this.edgeLength = edgeLength;
+    this.surfaceColor = surfaceColor;
+    this.reflection = reflection;
+    this.emissionColor = emissionColor;
+	this.transparency = transparency;
+	this.type = "Cube";
+	this.preview = CubeIMG;
+
+	this.intersect = function (rayorig, raydir) {
+		var dirfrac = new Vec3( 1.0 / raydir.x, 1.0 / raydir.y, 1.0 / raydir.z);
+		var t1 = (lb().x - raydir.x) * dirfrac.x;
+		var t2 = (rt().x - raydir.x) * dirfrac.x;
+		var t3 = (lb().y - raydir.y) * dirfrac.y;
+		var t4 = (rt().y - raydir.y) * dirfrac.y;
+		var t5 = (lb().z - raydir.z) * dirfrac.z;
+		var t6 = (rt().z - raydir.z) * dirfrac.z;
+
+		var tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
+		var tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
+
+		if (tmax < 0) {
+			return false;
+		}
+
+		// if tmin > tmax, ray doesn't intersect AABB
+		if (tmin > tmax) {
+			return false;
+		}
+		return [tmin, tmax];
+	};
+	this.getOption = function(name) {
+		return this[name];
+	};
+	this.setOption = function(key, value) {
+		this[key] = value;
+	}
+	this.getAvailableOptions = function() {
+		return {
+			position: position,
+			edgeLength: edgeLength,
+			surfaceColor: surfaceColor,
+			reflection: reflection,
+			emissionColor: emissionColor,
+			transparency: transparency
+		};
+	};
+
+	// calculate left bottom and right top corner of the cube
+	var lb = function (){
+		return new Vec3(position.x - (edgeLength / 2), position.y - (edgeLength / 2), position.z - (edgeLength / 2));
+	};
+	var rt = function (){
+		return new Vec3(position.x + (edgeLength / 2), position.y + (edgeLength / 2), position.z + (edgeLength / 2));
+	};
+}
 export function Vec3(x, y, z){
 	this.x = x;
 	this.y = y;
@@ -246,4 +304,4 @@ export function Vec3(x, y, z){
 		if(this.x < 0 || this.y < 0 || this.z < 0) { return new Vec3(0,0,0); }
 		return new Vec3(Math.sqrt(this.x), Math.sqrt(this.y), Math.sqrt(this.z));
 	};
-  }
+}
