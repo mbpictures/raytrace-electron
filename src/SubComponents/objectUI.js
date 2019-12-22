@@ -27,14 +27,21 @@ export class ObjectComponent extends React.Component {
         this.setState(state);
     }
 
+    deleteObject(){
+        this.props.deleteObjectHandler();
+    }
+
     render() {
         var availableOptions = this.props.object.getAvailableOptions();
+        var arrowClass = "arrow" + (this.state.bodyEnabled ? " open" : "");
         var self = this;
         return (
                 <li>
-                    <div className="header" onClick={this.toggleBody.bind(this)}>
-                        <div className="preview"><img src={this.props.preview} /></div>
-                        <h2>{this.props.name}</h2>
+                    <div className="header">
+                        <div className="preview" onClick={this.toggleBody.bind(this)}><img src={this.props.preview} /></div>
+                        <h2 onClick={this.toggleBody.bind(this)}>{this.props.name}</h2>
+                        <div className="delete" onClick={this.deleteObject.bind(this)}><span></span><span></span></div>
+                        <div className={arrowClass} onClick={this.toggleBody.bind(this)}></div>
                     </div>
                     <Collapse isOpened={this.state.bodyEnabled}>
                         <div>

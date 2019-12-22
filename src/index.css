@@ -195,7 +195,36 @@ h1 {
 .objects ul li .header .arrow.open {
   transform: rotate(90deg);
 }
+.objects ul li .header .delete {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  background-color: #cccccc;
+  border-radius: 50%;
+  position: relative;
+  margin-right: 10px;
+  transition: .3s ease;
 }
+.objects ul li .header .delete:hover {
+  background-color: #aaaaaa;
+}
+.objects ul li .header .delete span {
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background-color: #333333;
+  position: absolute;
+  left: 3px;
+}
+.objects ul li .header .delete span:nth-child(1) {
+  transform: rotate(45deg);
+  top: 9px;
+}
+.objects ul li .header .delete span:nth-child(2) {
+  transform: rotate(-45deg);
+  bottom: 9px;
+}
+
 .objects ul li .preview {
   flex-basis: 0;
   flex-grow: 1;
@@ -219,6 +248,7 @@ h1 {
 }
 .objects ul li .body.open {
   display: block;
+}
 
 .ReactCollapse--collapse {
   transition: .5s ease;

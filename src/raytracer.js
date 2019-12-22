@@ -169,6 +169,9 @@ export const raytrace = (function() {
 		},
 		getObjects: function (){
 			return objects;
+		},
+		deleteObject: function (index){
+			objects.splice(index, 1);
 		}
     };
   }());

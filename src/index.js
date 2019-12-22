@@ -82,8 +82,8 @@ class RaytraceUI extends React.Component {
                     <h1>Objects</h1>
                     <ul>
                     {
-                        raytrace.getObjects().map(element => {
-                            return <ObjectComponent object={element} name={element.type} preview={element.preview} />
+                        raytrace.getObjects().map((element, index) => {
+                            return <ObjectComponent object={element} name={element.type} preview={element.preview} deleteObjectHandler={(index) => this.deleteObject(index)} />
                         })
                     }
                     </ul>
@@ -140,6 +140,11 @@ class RaytraceUI extends React.Component {
         var state = this.state;
         state.objectsExpanded = !state.objectsExpanded;
         this.setState(state);
+    }
+
+    deleteObject(index) {
+        raytrace.deleteObject(index);
+        this.setState(this.state);
     }
 }
  
