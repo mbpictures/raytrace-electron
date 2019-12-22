@@ -18,13 +18,16 @@ class RaytraceUI extends React.Component {
             width: 640,
             height: 480,
             selectedOption: "fov",
-            objectsExpanded: false
+            objectsExpanded: false,
+            objectSelectionOpen: false
         };
         this.output = React.createRef();
         this.objects = React.createRef();
 
         this.optionsChange = this.optionsChange.bind(this);
         this.changeOptionValue = this.changeOptionValue.bind(this);
+        this.addObject = this.addObject.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
 
         raytrace.addObject(new Sphere(new Vec3(0.0, -10004.0, -20.0), 10000.0, new Vec3(0.2, 0.2, 0.2), 0.0, 0.0, new Vec3(0,0,0)));
 		//spheres
@@ -39,7 +42,21 @@ class RaytraceUI extends React.Component {
     componentDidMount() {
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions.bind(this));
+        document.addEventListener('mousedown', this.handleClickOutside);
     }
+    
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    handleClickOutside(event) {
+        if(this.wrapper && !this.wrapper.contains(event.target) && this.state.objectSelectionOpen) { // handle user clicked outside of add object selection
+            var state = this.state;
+            state.objectSelectionOpen = false;
+            this.setState(state);
+        }
+    }
+
     updateDimensions(){
         var state = this.state;
         state.width = this.output.current.offsetWidth;
@@ -55,6 +72,7 @@ class RaytraceUI extends React.Component {
 
         var objectsClasses = "objects" + (this.state.objectsExpanded ? " open" : "");
         var expandObjectsClasses = "expandObjects" + (this.state.objectsExpanded ? " open" : "");
+        var objectSelectionClasses = "selection" + (this.state.objectSelectionOpen ? " open" : "");
         return(
             <div className="row">
                 <div className="output" ref={this.output}>
@@ -85,10 +103,21 @@ class RaytraceUI extends React.Component {
                         })
                     }
                     </ul>
-                    <a className="btn btn-success" onClick={this.addObject.bind(this)}>
-                        <div className="plus green"></div>
-                        Add Object
-                    </a>
+                    <div className="addObject">
+                        <a className="btn btn-success" onClick={this.openObjectSelection.bind(this)}>
+                            <div className="plus green"></div>
+                            Add Object
+                        </a>
+                        <div className={objectSelectionClasses} ref={node => this.wrapper = node}>
+                            <ul>
+                                {
+                                    Object.keys(raytrace.getAvailableObjectsDefault()).map(element => {
+                                        return <li onClick={() => this.addObject(element)}>{element}</li>
+                                    })
+                                }
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div className={expandObjectsClasses} onClick={this.expandObjects.bind(this)}><span></span><span></span><span></span></div>
             </div>
@@ -122,7 +151,6 @@ class RaytraceUI extends React.Component {
     }
 
     startRaytrace(){
-        console.log(this.refs.canvas);
         raytrace.render(this.refs.canvas, this);
     }
 
@@ -137,10 +165,18 @@ class RaytraceUI extends React.Component {
         this.setState(this.state);
     }
 
-    addObject() {
-        raytrace.addObject(new Sphere(new Vec3(0.0, 0.0, 0.0), 3.0, new Vec3(1.00, 1, 1), 1.0, 0.0, new Vec3(0,0,0)));
+    addObject(type) {
+        raytrace.addObject(raytrace.getAvailableObjectsDefault()[type]);
         this.setState(this.state);
     }
+
+    openObjectSelection() {
+        var state = this.state;
+        state.objectSelectionOpen = true;
+        this.setState(state);
+    }
+
+
 }
  
 ReactDOM.render(

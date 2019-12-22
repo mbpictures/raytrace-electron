@@ -58,6 +58,7 @@ h1 {
   cursor: pointer;
   transition: .3s ease;
   text-align: center;
+  display: block;
 }
 .btn:hover {
   color: #303030;
@@ -269,6 +270,44 @@ h1 {
 }
 .objects ul li .body.open {
   display: block;
+}
+.addObject {
+  position: relative;
+  width: 100%;
+}
+.addObject .selection {
+  width: 75%;
+  position: absolute;
+  top: 0;
+  left: 12.5%;
+  background-color: #666666;
+  -webkit-box-shadow: -10px 10px 14px 0px rgba(0,0,0,0.45);
+  -moz-box-shadow: -10px 10px 14px 0px rgba(0,0,0,0.45);
+  box-shadow: -10px 10px 14px 0px rgba(0,0,0,0.45);
+  transform-origin: center center;
+  transition: transform .4s ease;
+  transform: scale(0);
+}
+.addObject .selection.open {
+  transform: scale(1);
+}
+.addObject .selection ul {
+  list-style-type: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+.addObject .selection ul li {
+  width: 100%;
+  transition: .3s ease;
+  border-radius: 0;
+  margin: 0;
+  padding: 10px 0;
+  cursor: pointer;
+  text-align: center;
+}
+.addObject .selection ul li:hover {
+  background-color: #444444;
 }
 
 .plus {

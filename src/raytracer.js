@@ -168,6 +168,12 @@ export const raytrace = (function() {
 			}
 			return result;
 		},
+		getAvailableObjectsDefault: function (){
+			return {
+				"Cube": new Cube(new Vec3(0, 0, 0), 1.0, new Vec3(1, 1, 1), 1.0, 1, new Vec3(0,0,0)),
+				"Sphere": new Sphere(new Vec3(0, 0, 0), 1.0, new Vec3(1, 1, 1), 1.0, 1, new Vec3(0,0,0))
+			};
+		},
 		getObjects: function (){
 			return objects;
 		},
