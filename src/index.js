@@ -77,6 +77,7 @@ class RaytraceUI extends React.Component {
             <div className="row">
                 <div className="output" ref={this.output}>
                     <canvas ref="canvas" width={this.state.width} height={this.state.height}></canvas>
+                    <div className="downloadImage" onClick={this.saveImage.bind(this)}><div></div></div>
                 </div>
                 <div className="options">
                     <h1>Raytracer</h1>
@@ -152,6 +153,13 @@ class RaytraceUI extends React.Component {
 
     startRaytrace(){
         raytrace.render(this.refs.canvas, this);
+    }
+
+    saveImage(){
+        var link = document.createElement("a");
+        link.setAttribute("download", "Raytrace.png");
+        link.setAttribute("href", this.refs.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+        link.click();
     }
 
     expandObjects(){

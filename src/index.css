@@ -25,6 +25,29 @@ canvas {
 .output {
   width: 75%;
   height: 100%;
+  position: relative;
+}
+.output .downloadImage {
+  width: 40px;
+  height: 40px;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  background-color: #aaaaaa;
+  transition: .3s ease;
+  cursor: pointer;
+  z-index: 10;
+}
+.output .downloadImage:hover {  
+  background-color: #888888;
+}
+.output .downloadImage div {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAlElEQVRIiWNkIB78R+MzEqOJiQQLyAKjFoxaMGoBfgu0GRgYvjJAcjB6LmZAEv/OwMCgT64D0pEMwoXTyDUcBpbhMXw1pYYzMDAw8DMwMNzDYvgjBgYGIWpYwMDAwGDKwMDwE8nw3wwMDFbUMhwGKpAsKKe24QwMkBS3k4GBYR8DDZO3OBSPgiEEGBmwlzNUAzQvTQGWeSc+PHVQMgAAAABJRU5ErkJggg==);
+  width: 100%;
+  height: 100%;
+  background-size: 75%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .options {
   width: 25%;
