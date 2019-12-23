@@ -167,7 +167,7 @@ class RaytraceUI extends React.Component {
 
     addObject(type) {
         raytrace.addObject(raytrace.getAvailableObjectsDefault()[type]);
-        this.setState(this.state);
+        this.setState({objectSelectionOpen: false});
     }
 
 
