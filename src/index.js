@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {raytrace} from './raytracer';
-import {Sphere, Cube} from './raytracer';
-import {Vec3} from './raytracer';
+import {raytrace, Sphere, Cube, Vec3} from './raytracer';
 import {ObjectComponent} from './SubComponents/objectUI'
  
 class RaytraceUI extends React.Component {
@@ -105,7 +103,7 @@ class RaytraceUI extends React.Component {
                     }
                     </ul>
                     <div className="addObject">
-                        <a className="btn btn-success" onClick={this.openObjectSelection.bind(this)}>
+                        <a className="btn btn-success" onClick={() => this.setState({objectSelectionOpen: true})}>
                             <div className="plus green"></div>
                             Add Object
                         </a>
@@ -120,7 +118,7 @@ class RaytraceUI extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className={expandObjectsClasses} onClick={this.expandObjects.bind(this)}><span></span><span></span><span></span></div>
+                <div className={expandObjectsClasses} onClick={() => {this.setState({objectsExpanded: !this.state.objectsExpanded})}}><span></span><span></span><span></span></div>
             </div>
         );
     }
@@ -162,12 +160,6 @@ class RaytraceUI extends React.Component {
         link.click();
     }
 
-    expandObjects(){
-        var state = this.state;
-        state.objectsExpanded = !state.objectsExpanded;
-        this.setState(state);
-    }
-
     deleteObject(index) {
         raytrace.deleteObject(index);
         this.setState(this.state);
@@ -176,12 +168,6 @@ class RaytraceUI extends React.Component {
     addObject(type) {
         raytrace.addObject(raytrace.getAvailableObjectsDefault()[type]);
         this.setState(this.state);
-    }
-
-    openObjectSelection() {
-        var state = this.state;
-        state.objectSelectionOpen = true;
-        this.setState(state);
     }
 
 
