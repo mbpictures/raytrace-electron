@@ -120,17 +120,17 @@ export const raytrace = (function() {
         addSphere: function(position, radius, surfaceColor, reflection, emissionColor, transparency){
             objects.push(Sphere(position, radius, surfaceColor, reflection, emissionColor, transparency));
         },
-        changeSettingsByCanvas: function (self) {
-            settings.width = Math.round(self.state.width);
-            settings.height = Math.round(self.state.height);
+        changeSettingsByCanvas: function (dimension) {
+            settings.width = Math.round(dimension.width);
+            settings.height = Math.round(dimension.height);
             console.log("Settings changed:");
             console.log(settings);
         },
         /* render scene on given canvas object */
-        render: function(canvas, self){
-            this.changeSettingsByCanvas(self);
-			var context = canvas.getContext("2d");
-            var imagedata = context.createImageData(settings.width, settings.height);
+        render: function*(dimension, threshhold){
+            this.changeSettingsByCanvas(dimension);
+			var imagedata = new Array(dimension.width * dimension.height * 4);
+			var currentProgress = 0;
             for(var y = 0; y < settings.height; y++) {
                 for(var x = 0; x < settings.width; x++) {
                     var xx = (2 * ((x + 0.5) * settings.invWidth()) * settings.angle() * settings.aspectRatio());
@@ -140,14 +140,19 @@ export const raytrace = (function() {
 					
 					var pixel = trace(new Vec3(0,0,0), raydir, 0);
 					var pixelindex = (y * settings.width + x) * 4;
-					imagedata.data[pixelindex] = Math.floor(pixel.x >= 1.0 ? 255 : pixel.x * 256.0); // Red
-					imagedata.data[pixelindex+1] =Math.floor(pixel.y >= 1.0 ? 255 : pixel.y * 256.0); // Green
-					imagedata.data[pixelindex+2] = Math.floor(pixel.z >= 1.0 ? 255 : pixel.z * 256.0);  // Blue
-					imagedata.data[pixelindex+3] = 255;   // Alpha
+					imagedata[pixelindex] = Math.floor(pixel.x >= 1.0 ? 255 : pixel.x * 256.0); // Red
+					imagedata[pixelindex+1] =Math.floor(pixel.y >= 1.0 ? 255 : pixel.y * 256.0); // Green
+					imagedata[pixelindex+2] = Math.floor(pixel.z >= 1.0 ? 255 : pixel.z * 256.0);  // Blue
+					imagedata[pixelindex+3] = 255;   // Alpha
+
+					if(((x * y) / (settings.height * settings.width)) - currentProgress > threshhold){
+						currentProgress = (x * y) / (settings.height * settings.width);
+						yield {img: imagedata, progress: currentProgress};
+					}
                 }
             }
-			context.putImageData(imagedata, 0, 0);
 			console.log("Finished!");
+			yield {img: imagedata, progress: 1};
         },
 		addObject: function(object){
 			objects.push(object);

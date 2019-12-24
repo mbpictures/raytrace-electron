@@ -150,7 +150,15 @@ class RaytraceUI extends React.Component {
     }
 
     startRaytrace(){
-        raytrace.render(this.refs.canvas, this);
+        var context = this.refs.canvas.getContext("2d");
+        var imagedata = context.getImageData(0, 0, this.state.width, this.state.height);
+        var trace = raytrace.render({height: this.state.height, width: this.state.width}, 0.01);
+        var currenttrace = trace.next();
+        while(!currenttrace.done) {
+            imagedata.data.set(currenttrace.value.img);
+            context.putImageData(imagedata, 0, 0);
+            currenttrace = trace.next();
+        }
     }
 
     saveImage(){
