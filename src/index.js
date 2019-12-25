@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import {raytrace, Sphere, Cube, Vec3} from './raytracer';
-import {ObjectComponent} from './SubComponents/objectUI'
+import {ObjectComponent} from './SubComponents/objectUI';
+import RaytraceWorker from './raytrace.worker';
  
 class RaytraceUI extends React.Component {
 
@@ -17,7 +18,8 @@ class RaytraceUI extends React.Component {
             height: 480,
             selectedOption: "fov",
             objectsExpanded: false,
-            objectSelectionOpen: false
+            objectSelectionOpen: false,
+            progress: 0
         };
         this.output = React.createRef();
         this.objects = React.createRef();
@@ -152,13 +154,13 @@ class RaytraceUI extends React.Component {
     startRaytrace(){
         var context = this.refs.canvas.getContext("2d");
         var imagedata = context.getImageData(0, 0, this.state.width, this.state.height);
-        var trace = raytrace.render({height: this.state.height, width: this.state.width}, 0.01);
-        var currenttrace = trace.next();
-        while(!currenttrace.done) {
-            imagedata.data.set(currenttrace.value.img);
+        const worker = new RaytraceWorker();
+        worker.postMessage({raytraceOptions: raytrace.serializeOptions(), dimension: {width: this.state.width, height: this.state.height}, threshhold: 0.01});
+        worker.addEventListener('message', (event) => {
+            imagedata.data.set(event.data.img);
             context.putImageData(imagedata, 0, 0);
-            currenttrace = trace.next();
-        }
+            this.setState({progress: event.data.progress});
+        });
     }
 
     saveImage(){

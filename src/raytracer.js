@@ -112,7 +112,6 @@ export const raytrace = (function() {
 				}
 			}
 		}
-		
 		return surfaceColor.add(object.emissionColor);
 	};
       
@@ -131,6 +130,7 @@ export const raytrace = (function() {
             this.changeSettingsByCanvas(dimension);
 			var imagedata = new Array(dimension.width * dimension.height * 4);
 			var currentProgress = 0;
+			console.log(objects);
             for(var y = 0; y < settings.height; y++) {
                 for(var x = 0; x < settings.width; x++) {
                     var xx = (2 * ((x + 0.5) * settings.invWidth()) * settings.angle() * settings.aspectRatio());
@@ -184,6 +184,35 @@ export const raytrace = (function() {
 		},
 		deleteObject: function (index){
 			objects.splice(index, 1);
+		},
+		serializeOptions: function(){
+			var result = {settings: {}, objects: []};
+			// copy settings
+			for(var key in settings) {
+				if(typeof settings[key] !== "function")
+					result["settings"][key] = settings[key];
+			}
+			// copy objects
+			for(var i = 0; i < objects.length; i++) {
+				result.objects[i] = {objectType: objects[i].constructor.name, definition: objects[i].getAvailableOptions()};
+			}
+			return JSON.stringify(result);
+		},
+		deserializeOptions: function(options){
+			options = JSON.parse(options);
+			objects = options.objects;
+			for(var i = 0; i < objects.length; i++) {
+				var temp = eval("new " + objects[i].objectType + "()");
+				temp.setAllOptions(objects[i].definition);
+				objects[i] = temp;
+			}
+			for(var key in options.settings) {
+				if(typeof options.settings[key] === 'object') {
+					settings[key] = Object.assign(new Vec3(), options.settings[key]);
+					continue;
+				}
+				settings[key] = options.settings[key];
+			}
 		}
     };
   }());
@@ -201,7 +230,7 @@ export function Sphere(position, radius, surfaceColor, reflection, transparency,
     /* intersection between this and ray consisting of origin and direction (Vec3)
         return: false (no intersection) or array of 2 intersection points */
     this.intersect = function(rayorig, raydir){
-        var l = position.subtract(rayorig);
+        var l = this.position.subtract(rayorig);
         var tca = l.dot(raydir);
         if(tca < 0){ return false; }
         var d2 = l.dot(l) - (tca * tca);
@@ -217,13 +246,22 @@ export function Sphere(position, radius, surfaceColor, reflection, transparency,
 	}
 	this.getAvailableOptions = function() {
 		return {
-			position: position,
-			radius: radius,
-			surfaceColor: surfaceColor,
-			reflection: reflection,
-			emissionColor: emissionColor,
-			transparency: transparency
+			position: this.position,
+			radius: this.radius,
+			surfaceColor: this.surfaceColor,
+			reflection: this.reflection,
+			emissionColor: this.emissionColor,
+			transparency: this.transparency
 		};
+	};
+	this.setAllOptions = function(options) {
+		for(var key in options) {
+			if(typeof options[key] === 'object'){
+				this[key] = Object.assign(new Vec3, options[key]);
+				continue;
+			}
+			this[key] = options[key];
+		}
 	};
 }
 
@@ -239,12 +277,12 @@ export function Cube(position, edgeLength, surfaceColor, reflection, transparenc
 
 	this.intersect = function (rayorig, raydir) {
 		var dirfrac = new Vec3( 1.0 / raydir.x, 1.0 / raydir.y, 1.0 / raydir.z);
-		var t1 = (lb().x - raydir.x) * dirfrac.x;
-		var t2 = (rt().x - raydir.x) * dirfrac.x;
-		var t3 = (lb().y - raydir.y) * dirfrac.y;
-		var t4 = (rt().y - raydir.y) * dirfrac.y;
-		var t5 = (lb().z - raydir.z) * dirfrac.z;
-		var t6 = (rt().z - raydir.z) * dirfrac.z;
+		var t1 = (lb(this).x - raydir.x) * dirfrac.x;
+		var t2 = (rt(this).x - raydir.x) * dirfrac.x;
+		var t3 = (lb(this).y - raydir.y) * dirfrac.y;
+		var t4 = (rt(this).y - raydir.y) * dirfrac.y;
+		var t5 = (lb(this).z - raydir.z) * dirfrac.z;
+		var t6 = (rt(this).z - raydir.z) * dirfrac.z;
 
 		var tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
 		var tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
@@ -267,21 +305,30 @@ export function Cube(position, edgeLength, surfaceColor, reflection, transparenc
 	}
 	this.getAvailableOptions = function() {
 		return {
-			position: position,
-			edgeLength: edgeLength,
-			surfaceColor: surfaceColor,
-			reflection: reflection,
-			emissionColor: emissionColor,
-			transparency: transparency
+			position: this.position,
+			edgeLength: this.edgeLength,
+			surfaceColor: this.surfaceColor,
+			reflection: this.reflection,
+			emissionColor: this.emissionColor,
+			transparency: this.transparency
 		};
+	};
+	this.setAllOptions = function(options) {
+		for(var key in options) {
+			if(typeof options[key] === 'object'){
+				this[key] = Object.assign(new Vec3, options[key]);
+				continue;
+			}
+			this[key] = options[key];
+		}
 	};
 
 	// calculate left bottom and right top corner of the cube
-	var lb = function (){
-		return new Vec3(position.x - (edgeLength / 2), position.y - (edgeLength / 2), position.z - (edgeLength / 2));
+	var lb = function (self){
+		return new Vec3(self.position.x - (self.edgeLength / 2), self.position.y - (self.edgeLength / 2), self.position.z - (self.edgeLength / 2));
 	};
-	var rt = function (){
-		return new Vec3(position.x + (edgeLength / 2), position.y + (edgeLength / 2), position.z + (edgeLength / 2));
+	var rt = function (self){
+		return new Vec3(self.position.x + (self.edgeLength / 2), self.position.y + (self.edgeLength / 2), self.position.z + (self.edgeLength / 2));
 	};
 }
 export function Vec3(x, y, z){
