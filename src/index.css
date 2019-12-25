@@ -352,3 +352,20 @@ h1 {
 .ReactCollapse--content {
   padding: 0 1%;
 }
+
+.progress {
+  width: 100%;
+  height: 30px;
+  background-color: #aaaaaa;
+  position: relative;
+}
+.progress > .inner {
+  height: 100%;
+  background-color: #3498db;
+}
+.progress > .label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}

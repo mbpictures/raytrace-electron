@@ -4,6 +4,7 @@ import './index.css';
 import {raytrace, Sphere, Cube, Vec3} from './raytracer';
 import {ObjectComponent} from './SubComponents/objectUI';
 import RaytraceWorker from './raytrace.worker';
+import { ProgressBar } from './SubComponents/progressUI';
  
 class RaytraceUI extends React.Component {
 
@@ -82,6 +83,8 @@ class RaytraceUI extends React.Component {
                     <h1>Raytracer</h1>
                     <button onClick={this.startRaytrace.bind(this)} className="btn btn-primary">Render</button>
 
+                    <ProgressBar progress={this.state.progress} />
+
                     <select ref="options" id="options" className="input" onChange={this.optionsChange}>
                         {options}
                     </select>
@@ -151,6 +154,7 @@ class RaytraceUI extends React.Component {
     }
 
     startRaytrace(){
+        this.setState({progress: 0});
         var context = this.refs.canvas.getContext("2d");
         var imagedata = context.getImageData(0, 0, this.state.width, this.state.height);
         const worker = new RaytraceWorker();
