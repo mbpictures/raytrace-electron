@@ -116,9 +116,6 @@ export const raytrace = (function() {
 	};
       
     return {
-        addSphere: function(position, radius, surfaceColor, reflection, emissionColor, transparency){
-            objects.push(Sphere(position, radius, surfaceColor, reflection, emissionColor, transparency));
-        },
         changeSettingsByCanvas: function (dimension) {
             settings.width = Math.round(dimension.width);
             settings.height = Math.round(dimension.height);
