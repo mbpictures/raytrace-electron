@@ -44,7 +44,6 @@ export const raytrace = (function() {
 		if(object === undefined){
 			return settings.backgroundColor; // black
 		}
-		
 		var surfaceColor = new Vec3(0,0,0);
 		
 		var phit = rayorig.add(raydir.multiply(new Vec3(tnear, tnear, tnear))); // intersection point
@@ -122,10 +121,10 @@ export const raytrace = (function() {
             console.log("Settings changed:");
             console.log(settings);
         },
-        /* render scene on given canvas object */
+        /* render scene based on dimensions and update threshhold (percent) */
         render: function*(dimension, threshhold){
             this.changeSettingsByCanvas(dimension);
-			var imagedata = new Array(dimension.width * dimension.height * 4);
+			var imagedata = new Array(settings.width * settings.height * 4);
 			var currentProgress = 0;
             for(var y = 0; y < settings.height; y++) {
                 for(var x = 0; x < settings.width; x++) {
@@ -136,9 +135,9 @@ export const raytrace = (function() {
 					
 					var pixel = trace(new Vec3(0,0,0), raydir, 0);
 					var pixelindex = (y * settings.width + x) * 4;
-					imagedata[pixelindex] = Math.floor(pixel.x >= 1.0 ? 255 : pixel.x * 256.0); // Red
-					imagedata[pixelindex+1] =Math.floor(pixel.y >= 1.0 ? 255 : pixel.y * 256.0); // Green
-					imagedata[pixelindex+2] = Math.floor(pixel.z >= 1.0 ? 255 : pixel.z * 256.0);  // Blue
+					imagedata[pixelindex]   = Math.floor(pixel.x >= 1.0 ? 255 : pixel.x * 256.0); // Red
+					imagedata[pixelindex+1] = Math.floor(pixel.y >= 1.0 ? 255 : pixel.y * 256.0); // Green
+					imagedata[pixelindex+2] = Math.floor(pixel.z >= 1.0 ? 255 : pixel.z * 256.0); // Blue
 					imagedata[pixelindex+3] = 255;   // Alpha
 
 					if(((x * y) / (settings.height * settings.width)) - currentProgress > threshhold){
