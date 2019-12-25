@@ -81,7 +81,7 @@ export const raytrace = (function() {
 			surfaceColor = surfaceColor.multiply(object.surfaceColor);
 		}
 		else{
-			for (var i = 0; i < objects.length; i++) {
+			for (i = 0; i < objects.length; i++) {
 				if (objects[i].emissionColor.x > 0) {
 					// object is a light!
 					var transmission = new Vec3(1, 1, 1);
@@ -130,7 +130,6 @@ export const raytrace = (function() {
             this.changeSettingsByCanvas(dimension);
 			var imagedata = new Array(dimension.width * dimension.height * 4);
 			var currentProgress = 0;
-			console.log(objects);
             for(var y = 0; y < settings.height; y++) {
                 for(var x = 0; x < settings.width; x++) {
                     var xx = (2 * ((x + 0.5) * settings.invWidth()) * settings.angle() * settings.aspectRatio());
@@ -257,7 +256,7 @@ export function Sphere(position, radius, surfaceColor, reflection, transparency,
 	this.setAllOptions = function(options) {
 		for(var key in options) {
 			if(typeof options[key] === 'object'){
-				this[key] = Object.assign(new Vec3, options[key]);
+				this[key] = Object.assign(new Vec3(), options[key]);
 				continue;
 			}
 			this[key] = options[key];
@@ -316,7 +315,7 @@ export function Cube(position, edgeLength, surfaceColor, reflection, transparenc
 	this.setAllOptions = function(options) {
 		for(var key in options) {
 			if(typeof options[key] === 'object'){
-				this[key] = Object.assign(new Vec3, options[key]);
+				this[key] = Object.assign(new Vec3(), options[key]);
 				continue;
 			}
 			this[key] = options[key];

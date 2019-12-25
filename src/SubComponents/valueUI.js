@@ -8,7 +8,7 @@ export class ValueComponent extends React.Component {
 
     changeOptionValue(evt, mode, key) {
         var state = this.state;
-        if(mode == "vector") {
+        if(mode === "vector") {
             state.value[key] = evt.target.value;
         }
         else {

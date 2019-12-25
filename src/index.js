@@ -61,7 +61,6 @@ class RaytraceUI extends React.Component {
         var state = this.state;
         state.width = this.output.current.offsetWidth;
         state.height = this.output.current.offsetHeight;
-        console.log(this.output.current.offsetWidth);
         this.setState(state);
     }
     render(){
@@ -81,7 +80,7 @@ class RaytraceUI extends React.Component {
                 </div>
                 <div className="options">
                     <h1>Raytracer</h1>
-                    <a onClick={this.startRaytrace.bind(this)} className="btn btn-primary">Render</a>
+                    <button onClick={this.startRaytrace.bind(this)} className="btn btn-primary">Render</button>
 
                     <select ref="options" id="options" className="input" onChange={this.optionsChange}>
                         {options}
@@ -105,10 +104,10 @@ class RaytraceUI extends React.Component {
                     }
                     </ul>
                     <div className="addObject">
-                        <a className="btn btn-success" onClick={() => this.setState({objectSelectionOpen: true})}>
+                        <button className="btn btn-success" onClick={() => this.setState({objectSelectionOpen: true})}>
                             <div className="plus green"></div>
                             Add Object
-                        </a>
+                        </button>
                         <div className={objectSelectionClasses} ref={node => this.wrapper = node}>
                             <ul>
                                 {

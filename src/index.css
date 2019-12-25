@@ -82,6 +82,7 @@ h1 {
   transition: .3s ease;
   text-align: center;
   display: block;
+  width: 100%;
 }
 .btn:hover {
   color: #303030;
