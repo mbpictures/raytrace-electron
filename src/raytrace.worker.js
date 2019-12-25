@@ -1,6 +1,6 @@
 import { raytrace } from "./raytracer";
 
-self.addEventListener("message", raytraceWorker);
+self.addEventListener("message", raytraceWorker); // eslint-disable-line no-restricted-globals
 
 function raytraceWorker(event) {
     raytrace.deserializeOptions(event.data.raytraceOptions);
