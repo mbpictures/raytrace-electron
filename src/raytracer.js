@@ -104,10 +104,14 @@ export const raytrace = (function() {
 						}
 					}
 					transmission = Math.min(1.0, settings.minShadowBrightness + (1.0 - (raysInShadow / settings.shadowRays)));
-					surfaceColor = surfaceColor.add(object.surfaceColor.multiply(new Vec3(
-						transmission * Math.max(0, nhit.dot(lightDirection)), 
-						transmission * Math.max(0, nhit.dot(lightDirection)), 
-						transmission * Math.max(0, nhit.dot(lightDirection)))).multiply(objects[i].emissionColor));
+					surfaceColor = surfaceColor.add(
+						object.surfaceColor.multiply(
+							new Vec3(
+								transmission * Math.max(0, nhit.dot(lightDirection)), 
+								transmission * Math.max(0, nhit.dot(lightDirection)), 
+								transmission * Math.max(0, nhit.dot(lightDirection))
+							)
+						).multiply(objects[i].emissionColor));
 				}
 			}
 		}
