@@ -47,8 +47,8 @@ export const raytrace = (function() {
 		var surfaceColor = new Vec3(0,0,0);
 		
 		var phit = rayorig.add(raydir.multiply(new Vec3(tnear, tnear, tnear))); // intersection point
-    	var nhit = phit.subtract(object.position);
-		nhit.normalize();
+		var nhit = object.calculateNormalByHit(phit);
+		
 		var bias = Math.pow(10, -4); var inside = false;
 		if (raydir.dot(nhit) > 0){ nhit = nhit.multiply(new Vec3(-1, -1, -1)); inside = true; }
 		
@@ -262,6 +262,11 @@ export function Sphere(position, radius, surfaceColor, reflection, transparency,
 			this[key] = options[key];
 		}
 	};
+	this.calculateNormalByHit = function(hitPosition) {
+		var hit = hitPosition.subtract(this.position);
+		hit.normalize();
+		return hit;
+	}
 }
 
 export function Cube(position, edgeLength, surfaceColor, reflection, transparency, emissionColor) {
@@ -321,6 +326,30 @@ export function Cube(position, edgeLength, surfaceColor, reflection, transparenc
 			this[key] = options[key];
 		}
 	};
+	this.calculateNormalByHit = function(hitPosition) {
+		var normal = new Vec3(0, 0, 0);
+		var min = Math.pow(10, 8);
+		var distance;
+
+		hitPosition = hitPosition.subtract(this.position);
+
+		distance = Math.abs(this.edgeLength - Math.abs(hitPosition.x));
+		if (distance < min) {
+			min = distance;
+			normal = new Vec3(1 * Math.sign(hitPosition.x), 0, 0);    // Cardinal axis for X
+		}
+		distance = Math.abs(this.edgeLength - Math.abs(hitPosition.y));
+		if (distance < min) {
+			min = distance;
+			normal = new Vec3(0, 1 * Math.sign(hitPosition.y), 0);    // Cardinal axis for Y
+		}
+		distance = Math.abs(this.edgeLength - Math.abs(hitPosition.z));
+		if (distance < min) {
+			min = distance;
+			normal = new Vec3(0, 0, 1 * Math.sign(hitPosition.z));    // Cardinal axis for Z
+		}
+		return normal;
+	}
 
 	// calculate left bottom and right top corner of the cube
 	var lb = function (self){
