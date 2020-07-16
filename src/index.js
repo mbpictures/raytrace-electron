@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import {raytrace, Sphere, Cube, Vec3} from './raytracer';
+import {Raytrace, Sphere, Cube, Vec3} from './raytracer';
 import {ObjectComponent} from './SubComponents/objectUI';
 import RaytraceWorker from './raytrace.worker';
 import { ProgressBar } from './SubComponents/progressUI';
  
 class RaytraceUI extends React.Component {
+
+    raytracer;
 
     constructor(props){
         super(props);
@@ -30,14 +32,16 @@ class RaytraceUI extends React.Component {
         this.addObject = this.addObject.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
 
-        raytrace.addObject(new Sphere(new Vec3(0.0, -10004.0, -20.0), 10000.0, new Vec3(0.2, 0.2, 0.2), 0.0, 0.0, new Vec3(0,0,0)));
+        this.raytracer = new Raytrace();
+
+        this.raytracer.addObject(new Sphere(new Vec3(0.0, -10004.0, -20.0), 10000.0, new Vec3(0.2, 0.2, 0.2), 0.0, 0.0, new Vec3(0,0,0)));
 		//spheres
-		raytrace.addObject(new Sphere(new Vec3(5.0, 0.0, -20.0), 3.0, new Vec3(1.00, 0.32, 0.36), 1.0, 0.0, new Vec3(0,0,0)));
-		raytrace.addObject(new Cube(new Vec3(10.0, -1.0, -15.0), 1.0, new Vec3(0.90, 0.76, 0.46), 1.0, 0.5, new Vec3(0,0,0)));
-		raytrace.addObject(new Sphere(new Vec3(10.0, 0.0, -25.0), 2.0, new Vec3(0.65, 0.77, 0.97), 1.0, 0.0, new Vec3(0,0,0)));
-		raytrace.addObject(new Sphere(new Vec3(2.5, 0, -15.0), 2.0, new Vec3(0.90, 0.90, 0.90), 1.0, 0.0, new Vec3(0,0,0)));
+		this.raytracer.addObject(new Sphere(new Vec3(5.0, 0.0, -20.0), 3.0, new Vec3(1.00, 0.32, 0.36), 1.0, 0.0, new Vec3(0,0,0)));
+		this.raytracer.addObject(new Cube(new Vec3(10.0, -1.0, -15.0), 1.0, new Vec3(0.90, 0.76, 0.46), 1.0, 0.5, new Vec3(0,0,0)));
+		this.raytracer.addObject(new Sphere(new Vec3(10.0, 0.0, -25.0), 2.0, new Vec3(0.65, 0.77, 0.97), 1.0, 0.0, new Vec3(0,0,0)));
+		this.raytracer.addObject(new Sphere(new Vec3(2.5, 0, -15.0), 2.0, new Vec3(0.90, 0.90, 0.90), 1.0, 0.0, new Vec3(0,0,0)));
 		//light
-		raytrace.addObject(new Sphere(new Vec3(0.0, 20, -30.0), 3, new Vec3(0.0, 0.0, 0.0), 0.0, 0.0, new Vec3(3, 3, 3)));
+		this.raytracer.addObject(new Sphere(new Vec3(0.0, 20, -30.0), 3, new Vec3(0.0, 0.0, 0.0), 0.0, 0.0, new Vec3(3, 3, 3)));
 
     }
     componentDidMount() {
@@ -65,7 +69,7 @@ class RaytraceUI extends React.Component {
         this.setState(state);
     }
     render(){
-        var availableOptions = raytrace.getAvailableOptions();
+        var availableOptions = this.raytracer.getAvailableOptions();
         var options = Object.keys(availableOptions).map(function(key){
             return <option value={key}>{availableOptions[key]}</option>;
         });
@@ -101,7 +105,7 @@ class RaytraceUI extends React.Component {
                     <h1>Objects</h1>
                     <ul>
                     {
-                        raytrace.getObjects().map((element, index) => {
+                        this.raytracer.getObjects().map((element, index) => {
                             return <ObjectComponent object={element} name={element.type} preview={element.preview} deleteObjectHandler={(index) => this.deleteObject(index)} />
                         })
                     }
@@ -114,7 +118,7 @@ class RaytraceUI extends React.Component {
                         <div className={objectSelectionClasses} ref={node => this.wrapper = node}>
                             <ul>
                                 {
-                                    Object.keys(raytrace.getAvailableObjectsDefault()).map(element => {
+                                    Object.keys(this.raytracer.getAvailableObjectsDefault()).map(element => {
                                         return <li onClick={() => this.addObject(element)}>{element}</li>
                                     })
                                 }
@@ -137,7 +141,7 @@ class RaytraceUI extends React.Component {
     }
 
     optionsChange(event){
-        var val = raytrace.getOption(event.target.value);
+        var val = this.raytracer.getOption(event.target.value);
         var state = this.state;
         state["selectedOption"] = event.target.value;
         if(typeof val === 'object'){
@@ -158,7 +162,7 @@ class RaytraceUI extends React.Component {
         var context = this.refs.canvas.getContext("2d");
         var imagedata = context.getImageData(0, 0, this.state.width, this.state.height);
         const worker = new RaytraceWorker();
-        worker.postMessage({raytraceOptions: raytrace.serializeOptions(), dimension: {width: this.state.width, height: this.state.height}, threshhold: 0.01});
+        worker.postMessage({raytraceOptions: this.raytracer.serializeOptions(), dimension: {width: this.state.width, height: this.state.height}, threshhold: 0.01});
         worker.addEventListener('message', (event) => {
             imagedata.data.set(event.data.img);
             context.putImageData(imagedata, 0, 0);
@@ -174,19 +178,19 @@ class RaytraceUI extends React.Component {
     }
 
     deleteObject(index) {
-        raytrace.deleteObject(index);
+        this.raytracer.deleteObject(index);
         this.setState(this.state);
     }
 
     addObject(type) {
-        raytrace.addObject(raytrace.getAvailableObjectsDefault()[type]);
+        this.raytracer.addObject(this.raytracer.getAvailableObjectsDefault()[type]);
         this.setState({objectSelectionOpen: false});
     }
 
 
 }
- 
+
 ReactDOM.render(
-  <RaytraceUI/>,
-  document.getElementById('root')
+    <RaytraceUI/>,
+    document.getElementById('root')
 );
