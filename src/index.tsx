@@ -1,16 +1,37 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import './index.css';
 import {Raytrace, Sphere, Cube, Vec3} from './raytracer';
 import {ObjectComponent} from './SubComponents/objectUI';
-import RaytraceWorker from './raytrace.worker';
 import { ProgressBar } from './SubComponents/progressUI';
- 
-class RaytraceUI extends React.Component {
 
-    raytracer;
+const RaytraceWorker = require("worker-loader?name=dist/[name].js!./raytrace.worker");
 
-    constructor(props){
+
+
+interface RaytraceState {
+    numberStyle: any;
+    vectorStyle: any;
+    number: number;
+    vector: any;
+    width: number;
+    height: number;
+    selectedOption: string;
+    objectsExpanded: boolean;
+    objectSelectionOpen: boolean;
+    progress: number;
+
+}
+
+class RaytraceUI extends React.Component<{}, RaytraceState> {
+    state: RaytraceState;
+    raytracer: Raytrace;
+    output: React.RefObject<any>;
+    objects: React.RefObject<any>;
+    canvas: HTMLCanvasElement;
+    wrapper: HTMLDivElement;
+
+    constructor(props: {}){
         super(props);
         this.state = {
             numberStyle: {display: "flex"},
@@ -54,7 +75,7 @@ class RaytraceUI extends React.Component {
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
-    handleClickOutside(event) {
+    handleClickOutside(event: any) {
         if(this.wrapper && !this.wrapper.contains(event.target) && this.state.objectSelectionOpen) { // handle user clicked outside of add object selection
             var state = this.state;
             state.objectSelectionOpen = false;
@@ -69,7 +90,7 @@ class RaytraceUI extends React.Component {
         this.setState(state);
     }
     render(){
-        var availableOptions = this.raytracer.getAvailableOptions();
+        var availableOptions: any = this.raytracer.getAvailableOptions();
         var options = Object.keys(availableOptions).map(function(key){
             return <option value={key}>{availableOptions[key]}</option>;
         });
@@ -80,7 +101,7 @@ class RaytraceUI extends React.Component {
         return(
             <div className="row">
                 <div className="output" ref={this.output}>
-                    <canvas ref="canvas" width={this.state.width} height={this.state.height}></canvas>
+                    <canvas ref={(c) => this.canvas = c} width={this.state.width} height={this.state.height}></canvas>
                     <div className="downloadImage" onClick={this.saveImage.bind(this)}><div></div></div>
                 </div>
                 <div className="options">
@@ -105,8 +126,8 @@ class RaytraceUI extends React.Component {
                     <h1>Objects</h1>
                     <ul>
                     {
-                        this.raytracer.getObjects().map((element, index) => {
-                            return <ObjectComponent object={element} name={element.type} preview={element.preview} deleteObjectHandler={(index) => this.deleteObject(index)} />
+                        this.raytracer.getObjects().map((element: any, index: number) => {
+                            return <ObjectComponent object={element} name={element.type} preview={element.preview} deleteObjectHandler={() => this.deleteObject(index)} />
                         })
                     }
                     </ul>
@@ -131,8 +152,8 @@ class RaytraceUI extends React.Component {
         );
     }
     
-    changeOptionValue(event, option, subOption){
-        var state = this.state;
+    changeOptionValue(event: any, option: "number" | "vector", subOption?: string){
+        let state: RaytraceState = this.state;
         if(option === "number")
             state[option] = event.target.value;
         else
@@ -140,9 +161,9 @@ class RaytraceUI extends React.Component {
         this.setState(state);
     }
 
-    optionsChange(event){
-        var val = this.raytracer.getOption(event.target.value);
-        var state = this.state;
+    optionsChange(event: any){
+        let val: any = this.raytracer.getOption(event.target.value);
+        let state: RaytraceState = this.state;
         state["selectedOption"] = event.target.value;
         if(typeof val === 'object'){
             state.vectorStyle = {display: "flex"};
@@ -159,13 +180,12 @@ class RaytraceUI extends React.Component {
 
     startRaytrace(){
         this.setState({progress: 0});
-        var context = this.refs.canvas.getContext("2d");
-        var imagedata = context.getImageData(0, 0, this.state.width, this.state.height);
-        const worker = new RaytraceWorker();
+        var imagedata = this.canvas.getContext("2d").getImageData(0, 0, this.state.width, this.state.height);
+        let worker = new RaytraceWorker();
         worker.postMessage({raytraceOptions: this.raytracer.serializeOptions(), dimension: {width: this.state.width, height: this.state.height}, threshhold: 0.01});
-        worker.addEventListener('message', (event) => {
+        worker.addEventListener('message', (event: any) => {
             imagedata.data.set(event.data.img);
-            context.putImageData(imagedata, 0, 0);
+            this.canvas.getContext("2d").putImageData(imagedata, 0, 0);
             this.setState({progress: event.data.progress});
         });
     }
@@ -173,16 +193,17 @@ class RaytraceUI extends React.Component {
     saveImage(){
         var link = document.createElement("a");
         link.setAttribute("download", "Raytrace.png");
-        link.setAttribute("href", this.refs.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+        link.setAttribute("href", this.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
         link.click();
     }
 
-    deleteObject(index) {
+    deleteObject(index: number) {
         this.raytracer.deleteObject(index);
         this.setState(this.state);
     }
 
-    addObject(type) {
+    addObject(type: string) {
+        if(type != "Cube" && type != "Sphere") return;
         this.raytracer.addObject(this.raytracer.getAvailableObjectsDefault()[type]);
         this.setState({objectSelectionOpen: false});
     }

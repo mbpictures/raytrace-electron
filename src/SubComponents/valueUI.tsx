@@ -1,13 +1,23 @@
-import React from 'react';
-export class ValueComponent extends React.Component {
-    constructor(props) {
+import * as React from 'react';
+
+export interface ValueProps {
+    value: any;
+    onChangeHandler(value: any): any;
+}
+
+export interface ValueState {
+    value: any;
+}
+
+export class ValueComponent extends React.Component<ValueProps, ValueState> {
+    constructor(props: ValueProps) {
         super(props);
 
         this.state = {value: this.props.value};
     }
 
-    changeOptionValue(evt, mode, key) {
-        var state = this.state;
+    changeOptionValue(evt: any, mode: string, key?: string) {
+        let state: ValueState = this.state;
         if(mode === "vector") {
             state.value[key] = evt.target.value;
         }

@@ -1,8 +1,16 @@
-import React from 'react';
+import * as React from 'react';
 import {ValueComponent} from './valueUI';
-import Collapse from 'react-collapse';
-export class ObjectComponent extends React.Component {
-    constructor(props) {
+import {Collapse} from 'react-collapse';
+
+export interface ObjectProps {
+    object: any;
+    preview: string;
+    name: string;
+    deleteObjectHandler(): any;
+}
+
+export class ObjectComponent extends React.Component<ObjectProps, {bodyEnabled: boolean}> {
+    constructor(props: ObjectProps) {
         super(props);
         this.state = {
             bodyEnabled: false
@@ -11,7 +19,7 @@ export class ObjectComponent extends React.Component {
         this.updateOptions = this.updateOptions.bind(this);
     }
     
-    updateOptions(key, value) {
+    updateOptions(key: any, value: any) {
         this.props.object.setOption(key, value);
     }
 

@@ -6,23 +6,37 @@
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1"
+    "@testing-library/user-event": "^7.2.1",
+    "@types/react-collapse": "^5.0.0",
+    "worker-plugin": "^4.0.3",
+    "worker-threads": "^1.0.0"
   },
   "devDependencies": {
+    "@types/react": "^16.9.43",
+    "@types/react-dom": "^16.9.8",
+    "css-loader": "^3.6.0",
     "electron": "^7.3.2",
+    "html-loader": "*",
+    "html-webpack-plugin": "*",
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.6",
     "react-collapse": "^5.0.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.3.0",
+    "sass-loader": "^9.0.2",
+    "source-map-loader": "^1.0.1",
+    "style-loader": "^1.2.1",
+    "ts-loader": "^8.0.1",
+    "typescript": "^3.9.7",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
     "worker-loader": "^2.0.0"
   },
   "main": "src/main.js",
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test --env=jsdom",
-    "eject": "react-scripts eject",
+    "start": "webpack-dev-server --open",
+    "build": "webpack",
     "electron": "electron .",
     "build-win32": "electron-packager . Raytracer --overwrite --asar --platform=win32 --arch=ia32 --prune=true --out=release-builds",
     "build-linux": "electron-packager . Raytracer --overwrite --platform=linux --arch=x64 --prune=true --out=release-builds"
