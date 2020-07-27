@@ -1,68 +1,42 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Raytracer
+This project represents a raytracer inside an electron & react environment.
 
-## Available Scripts
+Note: This project was developed as an introduction into electron and react, you should not use this project as a tutorial for one of these!
 
-In the project directory, you can run:
+## What can I learn and expect from this project?
+This project can act as a first contact point to raytracing and other render techniques using a simple and easy to understand scripting language like TypeScript. No boilerplate code or unnecessary features will distract you from the main part - the raytracing algorithm - of this repo. Some easy mathematical techniques you have to know for raytracing (e.g. normal calculation, intersections, ...) are included as well.
 
-### `npm start`
+## Download & Installation
+The only thing you have to do is to download/clone the repository and run the ```npm install``` inside the downloaded folder. This will automatically install all of the dependencies, including react and electron, and set up your project locally.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Usage
+After you installed the environment, start by running the "start" script using the ```npm run start``` script. This will start a webpack development server and open the webapp in your default browser. You will see the final result of the raytracer! Note: The page automatically refreshes, when you make some custom changes in the code.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Available scripts
+* start: Start a dev server and open it in the default browser (this method should be used to during development)
+* build: Use webpack to package the react app, compile the typescript code and provide a production ready webapp inside the "dist" folder
+* electron: Start an instance of electron running the web app (run the build script first!)
+* build-win32: create a Windows-32Bit executable of the electron application inside the release-builds folder
+* build-linux: create a Linux executable of the electron application inside the release-builds folder
 
-### `npm test`
+## Code
+The main part of the raytrace calculation is placed in the "src/raytracer.tsx" module. This contains a "Raytracer" class which handles all trace calculations and options handling.
+To prevent the UI from being unresponsive and freezing, a worker "thread" ("src/raytrace.worker.ts") is started, after the user presses the "Render"-Button.
+The UI coding are located in the "src/index.ts" and "src/SubComponents/*" files.
+The page is styled using the "src/index.css" file.
+To set up electron, the "src/main.js" file acts as the entry point.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
+* Options (FoV, Ray depth, amount of shadow rays, shadow rays spread, background color and minimum shadow brightness)
+* Reflections
+* Refraction
+* Soft and hard shadows
+* Emissive material
+* different diffuse material colors
+* "Scene set up"-UI
 
-### `npm run build`
+## Limits
+The raytracer is currently limited to work with spheres and cubes (work in progress). There is no plan to add support for polygon meshes.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Contribution
+Feel free to report bugs using the github issue tracker or to create pull requests.
