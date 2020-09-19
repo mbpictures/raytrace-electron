@@ -1,4 +1,4 @@
-import {Raytrace, Sphere, Cube, Vec3} from './raytracer';
+import {Raytrace} from './raytracer';
 
 const ctx: Worker = self as any;
 ctx.addEventListener("message", (event: RaytraceWorkerEvent) => {
