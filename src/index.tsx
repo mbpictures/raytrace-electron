@@ -30,6 +30,7 @@ class RaytraceUI extends React.Component<{}, RaytraceState> {
     objects: React.RefObject<any>;
     canvas: HTMLCanvasElement;
     wrapper: HTMLDivElement;
+    private updateDimensionsFunc: (this: Window, event: UIEvent) => any;
 
     constructor(props: {}){
         super(props);
@@ -67,12 +68,14 @@ class RaytraceUI extends React.Component<{}, RaytraceState> {
     }
     componentDidMount() {
         this.updateDimensions();
-        window.addEventListener("resize", this.updateDimensions.bind(this));
+        this.updateDimensionsFunc = this.updateDimensions.bind(this);
+        window.addEventListener("resize", this.updateDimensionsFunc);
         document.addEventListener('mousedown', this.handleClickOutside);
     }
     
     componentWillUnmount() {
         document.removeEventListener('mousedown', this.handleClickOutside);
+        window.removeEventListener("resize", this.updateDimensionsFunc);
     }
 
     handleClickOutside(event: any) {
