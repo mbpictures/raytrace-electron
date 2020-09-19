@@ -395,7 +395,6 @@ export class Cube implements Object {
 		}
 		distance = Math.abs(this.edgeLength - Math.abs(hitPosition.z));
 		if (distance < min) {
-			min = distance;
 			normal = new Vec3(0, 0, 1 * Math.sign(hitPosition.z));    // Cardinal axis for Z
 		}
 		return normal;
