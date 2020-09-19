@@ -1,4 +1,6 @@
 # Raytracer
+[![DeepScan grade](https://deepscan.io/api/teams/10967/projects/13907/branches/246161/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=10967&pid=13907&bid=246161)
+
 This project represents a raytracer inside an electron & react environment.
 
 Note: This project was developed as an introduction into electron and react, you should not use this project as a tutorial for one of these!
