@@ -53,6 +53,7 @@ class RaytraceUI extends React.Component<{}, RaytraceState> {
         this.changeOptionValue = this.changeOptionValue.bind(this);
         this.addObject = this.addObject.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
+        this.toggleObjectsVisibility = this.toggleObjectsVisibility.bind(this);
 
         this.raytracer = new Raytrace();
 
@@ -150,9 +151,15 @@ class RaytraceUI extends React.Component<{}, RaytraceState> {
                         </div>
                     </div>
                 </div>
-                <div className={expandObjectsClasses} onClick={() => {this.setState({objectsExpanded: !this.state.objectsExpanded})}}><span></span><span></span><span></span></div>
+                <div className={expandObjectsClasses} onClick={this.toggleObjectsVisibility}><span></span><span></span><span></span></div>
             </div>
         );
+    }
+
+    toggleObjectsVisibility() {
+        this.setState((prevState) => {
+            return {objectsExpanded: !prevState.objectsExpanded}
+        });
     }
     
     changeOptionValue(event: any, option: "number" | "vector", subOption?: string){

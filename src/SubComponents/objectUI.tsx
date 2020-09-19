@@ -24,7 +24,9 @@ export class ObjectComponent extends React.Component<ObjectProps, {bodyEnabled: 
     }
 
     toggleBody(){
-        this.setState({bodyEnabled: !this.state.bodyEnabled});
+        this.setState((prevState) => {
+            return {bodyEnabled: !prevState.bodyEnabled}
+        });
     }
 
     deleteObject(){
