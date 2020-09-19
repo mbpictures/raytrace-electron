@@ -95,7 +95,7 @@ class RaytraceUI extends React.Component<{}, RaytraceState> {
     render(){
         var availableOptions: any = this.raytracer.getAvailableOptions();
         var options = Object.keys(availableOptions).map(function(key){
-            return <option value={key}>{availableOptions[key]}</option>;
+            return <option key={`Option${key}`} value={key}>{availableOptions[key]}</option>;
         });
 
         var objectsClasses = "objects" + (this.state.objectsExpanded ? " open" : "");
@@ -130,7 +130,7 @@ class RaytraceUI extends React.Component<{}, RaytraceState> {
                     <ul>
                     {
                         this.raytracer.getObjects().map((element: any, index: number) => {
-                            return <ObjectComponent object={element} name={element.type} preview={element.preview} deleteObjectHandler={() => this.deleteObject(index)} />
+                            return <ObjectComponent key={`ObjectComponent${index}`} object={element} name={element.type} preview={element.preview} deleteObjectHandler={() => this.deleteObject(index)} />
                         })
                     }
                     </ul>
@@ -143,7 +143,7 @@ class RaytraceUI extends React.Component<{}, RaytraceState> {
                             <ul>
                                 {
                                     Object.keys(this.raytracer.getAvailableObjectsDefault()).map(element => {
-                                        return <li onClick={() => this.addObject(element)}>{element}</li>
+                                        return <li key={`AddObjectElem${element}`} onClick={() => this.addObject(element)}>{element}</li>
                                     })
                                 }
                             </ul>

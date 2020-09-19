@@ -47,7 +47,7 @@ export class ObjectComponent extends React.Component<ObjectProps, {bodyEnabled: 
                     <div>
                         <ul>
                             {Object.keys(availableOptions).map(function(key){
-                                return <li>
+                                return <li key={`AvailableOption${key}`}>
                                     {key}: <ValueComponent value={availableOptions[key]} onChangeHandler={(value) => self.updateOptions(key, value)} />
                                 </li>;
                             })}
